@@ -408,6 +408,14 @@
     }
 }
 
+.team-name {
+    font-size: 16px;
+}
+
+.team-title {
+    font-size: 14px;
+}
+
 .testimonial-carousel .owl-item .testimonial-text {
     background: var(--light);
     transform: scale(.8);
