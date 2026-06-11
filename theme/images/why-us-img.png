@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300">
+  <rect width="800" height="300" fill="#E6EFED" rx="30"/>
+  <rect x="50" y="50" width="200" height="200" rx="16" fill="#619E90" opacity="0.3"/>
+  <rect x="300" y="30" width="200" height="240" rx="16" fill="#153C33" opacity="0.2"/>
+  <rect x="550" y="60" width="200" height="180" rx="16" fill="#619E90" opacity="0.4"/>
+  <text x="400" y="160" text-anchor="middle" fill="#153C33" font-size="24" font-family="Archivo">Why Choose Us</text>
+</svg>

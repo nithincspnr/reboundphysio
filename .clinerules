@@ -1,0 +1,238 @@
+# Rebound Physiotherapy — Project Guide
+
+## Project Overview
+
+A static, single-page business website for **Rebound Physiotherapy and Rehabilitation Center**, a physiotherapy clinic based in Payyanur, Kannur, Kerala, India.
+
+- **Live site**: https://www.reboundphysiotherapy.in
+- **Repo**: https://github.com/nithincspnr/reboundphysio
+- **Purpose**: Business presence site — showcase services, team, testimonials, and contact information for the clinic.
+- **No build step required** for deployment — the site is pure HTML/CSS/JS that can be served from any static host.
+
+---
+
+## Tech Stack
+
+| Layer   | Technology                                                                                      |
+| ------- | ----------------------------------------------------------------------------------------------- |
+| Markup  | HTML5                                                                                           |
+| Styling | Bootstrap 5 (via SCSS customization) + custom CSS                                               |
+| Scripts | jQuery 3.4, vanilla JavaScript, WOW.js, OwlCarousel 2.3, CounterUp                              |
+| SCSS    | Custom `scss/bootstrap.scss` overrides Bootstrap variables, compiled to `css/bootstrap.min.css` |
+| Hosting | GitHub Pages (CNAME file for custom domain)                                                     |
+
+### Third-party libraries (loaded via CDN)
+
+- **jQuery 3.4** — `code.jquery.com`
+- **Bootstrap 5** — `cdn.jsdelivr.net/npm/bootstrap@5.0.0`
+- **Font Awesome 5** — icons
+- **Bootstrap Icons 1.4** — icons
+
+### Third-party libraries (vendored in `lib/`)
+
+- **WOW.js** — scroll animations (fadeIn for sections, fadeInUp for cards)
+- **OwlCarousel 2.3** — carousels (header, testimonials)
+- **Easing** — jQuery easing animations
+- **Waypoints** — scroll-triggered events
+- **CounterUp** — animated number counters
+- **Animate.css** — base animation library (WOW.js dependency)
+
+---
+
+## Project Structure
+
+```
+reboundphysio/
+├── index.html              # Single-page site (all sections in one file)
+├── CNAME                   # Custom domain for GitHub Pages
+├── README.md
+├── css/
+│   ├── bootstrap.min.css   # Compiled Bootstrap (from SCSS)
+│   └── style.css           # Custom CSS (~450 lines)
+├── scss/
+│   └── bootstrap.scss      # Bootstrap variable overrides → compiled to css/bootstrap.min.css
+├── js/
+│   └── main.js             # jQuery-based site functionality
+├── lib/                    # Vendored third-party JS/CSS libs
+│   ├── wow/
+│   ├── easing/
+│   ├── waypoints/
+│   ├── counterup/
+│   ├── owlcarousel/
+│   └── animate/
+└── img/                    # Team photos, service images, logo, favicon
+```
+
+---
+
+## Design System
+
+### Colors
+
+```css
+--primary: #00adef; /* Sky blue — main accent */
+--primary-dark: #0095cc;
+--primary-light: #e6f7fe;
+--light: #eff5ff; /* Light blue-tinted background */
+--dark: #1b2c51; /* Deep navy — headings, hero background */
+--body: #5a6072; /* Body text */
+--border: #dce7f5; /* Subtle borders */
+--surface: #ffffff; /* Card/surface backgrounds */
+```
+
+Used across: buttons, links, icons, borders, hover states, card accents, hero background.
+
+### Typography
+
+- **Body**: `'Open Sans', sans-serif` (400, 500, 600 weights)
+- **Headings**: `'Roboto', sans-serif` (500, 700, 900 weights)
+- Heading color: `var(--dark)`
+- Body color: `var(--body)` — `#5a6072`
+
+### Border & Radius
+
+- `--radius: 12px` (cards, buttons, containers)
+- `--radius-sm: 8px` (small elements, buttons)
+- `--radius-lg: 20px` (hero visual, large images)
+- `--border: #dce7f5` (subtle borders on cards)
+
+### Shadows
+
+- `--shadow-sm` — 0 2px 8px rgba(27, 44, 81, 0.06)
+- `--shadow-md` — 0 8px 30px rgba(27, 44, 81, 0.08)
+- `--shadow-lg` — 0 20px 60px rgba(27, 44, 81, 0.10)
+
+### Spacing
+
+- Bootstrap's standard spacing scale.
+- Sections use `py-5` (3rem padding top/bottom).
+- Cards use `g-4` gutters.
+
+---
+
+## HTML Conventions
+
+- **Single-page layout** — sections are anchored by IDs (`#about-us`, `#services`, `#team`, `#testimonials`)
+- **Section pattern**: `container-xxl py-5 > container > row > col`
+- **Section header pattern**: centered `text-center mx-auto mb-5 wow fadeInUp` with a `.section-badge` span and an `.section-title` h2
+- **All scroll animations** use WOW.js with `wow fadeIn` or `wow fadeInUp` classes plus `data-wow-delay="0.1s"` (incremented per item)
+  - `fadeIn` = simple opacity transition (used for larger blocks like topbar, navbar, hero halves, about columns, footer)
+  - `fadeInUp` = scale + opacity entrance (used for card grids: services, team, testimonials, section headers)
+- **Images** use `img-fluid` for responsiveness
+- **External links** open with `target="_blank"` (WhatsApp, social media)
+
+### Page Sections (in order)
+
+1. **Spinner** — loading overlay (`#spinner`)
+2. **Topbar** — address, hours, phone, social icons (hidden on mobile)
+3. **Navbar** — sticky top navigation with glassmorphism effect, scroll-linked `.scrolled` class
+4. **Header/Hero** — dark gradient hero with carousel and stats counters
+5. **About** — image stack (main + inset) + description with feature list
+6. **Services** — 4 service cards in a 2×2 grid with hover accent bar
+7. **Team** — profile cards in a responsive grid with hover zoom
+8. **Testimonials** — centered carousel with quote cards
+9. **Footer** — address, services links, quick links with accent top border
+10. **Back-to-top** — floating button
+
+### Section Badge Pattern
+
+```html
+<span class="section-badge mb-3">Section Label</span>
+<h2 class="section-title">Section Heading</h2>
+<p class="section-subtitle">Optional description text.</p>
+```
+
+The `.section-badge` is a pill with a dot indicator before the text, replacing the old `border rounded-pill py-1 px-4` pattern.
+
+---
+
+## CSS Conventions
+
+### File: `css/style.css`
+
+- Custom properties in `:root` for all design tokens
+- Component-prefixed classes: `.service-card`, `.team-card`, `.testimonial-card`, `.section-badge`, `.section-title`
+- Cards use `::before` pseudo-elements for accent hover effects (e.g., top bar on service cards)
+- Hero uses a full dark gradient background (`#1b2c51` → darker) with subtle SVG pattern overlay
+- Navbar uses `backdrop-filter: blur(10px)` for glassmorphism effect
+- Hover transitions use `0.4s cubic-bezier(0.22, 1, 0.36, 1)` — a smooth ease-out curve
+- WOW.js animations are customized: `fadeIn` = simple opacity, `fadeInUp` = scale(0.96) + opacity (no translateY)
+- Responsive overrides at 992px (tablet), 768px (mobile)
+- OwlCarousel overrides for header dots/nav and testimonial nav buttons
+
+### SCSS (Bootstrap overrides)
+
+- File: `scss/bootstrap.scss`
+- Customizes: `$primary`, `$light`, `$dark`, font families, border radius values, border colors, body text color
+- Compiled to `css/bootstrap.min.css` via: `cd scss && sass bootstrap.scss ../css/bootstrap.min.css --style compressed`
+
+---
+
+## JavaScript Conventions
+
+### File: `js/main.js`
+
+- All code wrapped in jQuery `(function ($) { ... })(jQuery);`
+- Uses `"use strict";`
+- **Spinner**: auto-hides on page load (1ms delay)
+- **WOW.js**: initialized on load
+- **Sticky navbar**: adds `shadow-sm` and `.scrolled` class when scrolled past 300px; hides above viewport initially
+- **Back-to-top**: fades in/out past 300px scroll, smooth scroll up with easeInOutExpo
+- **CounterUp**: animated stats on `.header` counters
+- **Carousels**: OwlCarousel configs — header carousel (autoplay off, fadeOutLeft, dots, nav arrows), testimonials (center mode, responsive: 1 item mobile, 2 items tablet)
+
+---
+
+## How to Make Changes
+
+### Adding a new section to the page
+
+1. Follow the existing section pattern: `container-xxl py-5 > container > row > col`
+2. Use the standard header pattern: `section-badge` + `section-title` + optional `section-subtitle`
+3. Add WOW.js animation classes with staggered delays (increment by 0.1s per item)
+4. Add a corresponding nav link in `.navbar-nav`
+
+### Adding a team member
+
+1. Add the image to `img/` (square crop recommended)
+2. Copy an existing `col.wow.fadeInUp` block in `#team`
+3. Update `src`, `alt`, `h5` name, `p.team-role` title, and optional `small` qualifications
+
+### Adding a service
+
+1. Copy an existing `.service-card` block in `#services`
+2. Choose an appropriate Font Awesome icon class for `.icon-wrap i`
+3. Update title and description text
+4. Increment `data-wow-delay` by 0.1s from the previous sibling
+
+### Adding a testimonial
+
+1. Add image to `img/` (square crop, 72×72px or larger)
+2. Copy a `.testimonial-card` block in `#testimonials`
+3. Update `src`, `alt`, `blockquote` text, author name, and role
+
+### Styling changes
+
+- For Bootstrap-level changes (colors, fonts, radius): edit `scss/bootstrap.scss` and recompile
+- For custom component styles: edit `css/style.css`
+- Recompile SCSS: `cd scss && sass bootstrap.scss ../css/bootstrap.min.css --style compressed`
+
+### Deployment
+
+- Push to `main` branch — GitHub Pages auto-deploys
+- `CNAME` file keeps the custom domain intact
+- No build step needed
+
+---
+
+## Important Conventions to Preserve
+
+- **Keep the single-page architecture** — don't split into multiple HTML files unless there's a strong need
+- **Maintain the color scheme** — primary blue (`#00adef`), light (`#eff5ff`), dark navy (`#1b2c51`)
+- **Follow the animation pattern** — WOW.js with staggered delays, smooth cubic-bezier transitions
+- **Use semantic IDs** for anchor navigation (e.g., `#services`, `#team`)
+- **Keep jQuery-based JS** in `main.js` following the existing module pattern
+- **Images should be optimized** for web before adding
+- **External links** (WhatsApp, social) open in new tabs
+- **All phone numbers and addresses** should match the business details exactly
+- **Card patterns** — service cards use `.service-card` with top accent bar hover, team cards use `.team-card` with image zoom hover, testimonials use `.testimonial-card` with open-quote pseudo-element
